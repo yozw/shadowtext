@@ -1,0 +1,3 @@
+* Add an option to make the size of the box correspond to the text instead of text + shadow
+* In case of negative offsets, some of the calculations should be done with absolute
+  value of the offset; check this.
