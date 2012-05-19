@@ -18,10 +18,12 @@
 \documentclass{article}
 
 \usepackage{xcolor}
+\usepackage{fullpage}
 \usepackage{shadowtext}
 \usepackage{multicol}
 
 \shadowbboxmode{text}
+
 
 \begin{document}
 \title{\bf The 
@@ -42,10 +44,10 @@ that adds a shadow behind text. Its usage is simple. The following code and its 
 \begin{multicols*}{2} 
 {\footnotesize
 \begin{verbatim}
-\shadowtext{This is a shadowtext}
+\shadowtext{This is a text with a shadow}
 \end{verbatim}}
 
-\shadowtext{This is a shadowtext}
+\shadowtext{This is a text with a shadow}
 \end{multicols*}
 \end{minipage}
 
@@ -60,11 +62,11 @@ sets the horizontal and vertical offset simultaneously. For example:
 {\footnotesize
 \begin{verbatim}
 \shadowoffset{2pt}
-\shadowtext{This is a shadowtext}
+\shadowtext{This is a text with a shadow}
 \end{verbatim}}
 
 \shadowoffset{2pt}
-\shadowtext{This is a shadowtext}
+\shadowtext{This is a text with a shadow}
 \end{multicols*}
 \end{minipage}
 
@@ -76,18 +78,35 @@ the horizontal and vertical offset. For example:
 {\footnotesize
 \begin{verbatim}
 \shadowoffsetx{1pt}
-\shadowoffsety{4pt}
-\shadowtext{This is a shadow text}
+\shadowoffsety{2pt}
+\shadowtext{This is a text with a shadow}
 \end{verbatim}}
 
 \shadowoffsetx{1pt}
-\shadowoffsety{4pt}
-\shadowtext{This is a shadow text}\\
+\shadowoffsety{2pt}
+\shadowtext{This is a text with a shadow}\\
 \phantom{}
 \end{multicols*}
 \end{minipage}
 
+Also, by setting the offset to a negative number, it is possible to 
+make shadows in other directions, as the following example shows:
 
+\begin{minipage}{\textwidth}
+\begin{multicols*}{2} 
+{\footnotesize
+\begin{verbatim}
+\shadowoffsetx{-2pt}
+\shadowoffsety{2pt}
+\shadowtext{This is a text with a shadow}
+\end{verbatim}}
+
+\shadowoffsetx{-2pt}
+\shadowoffsety{2pt}
+\shadowtext{This is a text with a shadow}\\
+\phantom{}
+\end{multicols*}
+\end{minipage}
 
 \section{Changing the color of the shadow}
 The color of the shadow may be changed by using the {\tt shadowcolor} and {\tt shadowrgb} commands.\footnote{Internally, the 
@@ -101,12 +120,12 @@ values. For example, the following code adds a blueish shadow using {\tt $\backs
 \begin{verbatim}
 \shadowoffset{1pt}
 \shadowcolor{blue!40!white}
-\shadowtext{This is a shadow text}
+\shadowtext{This is a text with a shadow}
 \end{verbatim}}
 
 \shadowoffset{1pt}
 \shadowcolor{blue!40!white}
-\shadowtext{This is a shadow text}\\
+\shadowtext{This is a text with a shadow}\\
 \phantom{}
 \end{multicols*}
 \end{minipage}
@@ -119,17 +138,17 @@ The following code produces a red shadow using {\tt $\backslash$shadowrgb}:
 \begin{verbatim}
 \shadowoffset{1pt}
 \shadowrgb{1.0, 0.5, 0.5}
-\shadowtext{This is a shadow text}
+\shadowtext{This is a text with a shadow}
 \end{verbatim}}
 
 \shadowoffset{1pt}
 \shadowrgb{1.0, 0.5, 0.5}
-\shadowtext{This is a shadow text}\\
+\shadowtext{This is a text with a shadow}\\
 \phantom{}
 \end{multicols*}
 \end{minipage}
 
-\section{Changing the bounding box style}
+\section{Changing the bounding box}
 There are two natural choices for the bounding box around the shadow text. The
 first choice is the bounding box around the main text; the second
 is the bounding box around the main text plus its shadow. These two choices are 
@@ -138,46 +157,49 @@ They can be activated by the commands {\tt $\backslash$shadowbboxmode\{text\}}
 and {\tt $\backslash$shadowbboxmode\{full\}} commands, respectively.
 For backwards compatibility reasons, the default bounding box mode is ``full''.
 
+\fboxsep=0pt
+\newcommand{\myfbox}[1]{{\color{blue!50!white}{\fbox{\normalcolor#1}}}}
+
 \subsection{``Full'' bounding box mode}
-This mode is activated by {\tt $\backslash$shadowbboxmode\{full\}}. The following output demonstrates (and tests) the effect:
+This mode is activated by {\tt $\backslash$shadowbboxmode\{full\}}. The following output demonstrates (and tests) its effect. The boxes are shown in blue in the second column.
 
 \shadowbboxmode{full}
 \renewcommand\arraystretch{2}
 \begin{tabular}{@{}l@{\qquad}l@{\qquad}l}
 \textbf{Shadow position} & \textbf{Inside framebox} & \textbf{Without framebox} \\
 Above left 
-& \shadowoffset{-6pt} This is a \framebox{\shadowtext{great}} package!
+& \shadowoffset{-6pt} This is a \myfbox{\shadowtext{great}} package!
 & \shadowoffset{-6pt} This is a \shadowtext{great} package! \\
 Below left 
-& \shadowoffsetx{-6pt}\shadowoffsety{6pt} This is a \framebox{\shadowtext{great}} package!
+& \shadowoffsetx{-6pt}\shadowoffsety{6pt} This is a \myfbox{\shadowtext{great}} package!
 & \shadowoffsetx{-6pt}\shadowoffsety{6pt} This is a \shadowtext{great} package! \\
 Above right
-& \shadowoffsetx{6pt}\shadowoffsety{-6pt} This is a \framebox{\shadowtext{great}} package!
+& \shadowoffsetx{6pt}\shadowoffsety{-6pt} This is a \myfbox{\shadowtext{great}} package!
 & \shadowoffsetx{6pt}\shadowoffsety{-6pt} This is a \shadowtext{great} package! \\
 Below right 
-& \shadowoffset{6pt} This is a \framebox{\shadowtext{great}} package!
+& \shadowoffset{6pt} This is a \myfbox{\shadowtext{great}} package!
 & \shadowoffset{6pt} This is a \shadowtext{great} package! \\
 \end{tabular}
 
 
 \subsection{``Text'' bounding box mode}
-This mode is activated by {\tt $\backslash$shadowbboxmode\{text\}}. The following output demonstrates (and tests) the effect:
+This mode is activated by {\tt $\backslash$shadowbboxmode\{text\}}. The following output demonstrates (and tests) its effect. The boxes are shown in blue in the second column.
 
 \shadowbboxmode{text}
 \renewcommand\arraystretch{2}
 \begin{tabular}{@{}l@{\qquad}l@{\qquad}l}
 \textbf{Shadow position} & \textbf{Inside framebox} & \textbf{Without framebox} \\
 Above left 
-& \shadowoffset{-6pt} This is a \framebox{\shadowtext{great}} package!
+& \shadowoffset{-6pt} This is a \myfbox{\shadowtext{great}} package!
 & \shadowoffset{-6pt} This is a \shadowtext{great} package! \\
 Below left 
-& \shadowoffsetx{-6pt}\shadowoffsety{6pt} This is a \framebox{\shadowtext{great}} package!
+& \shadowoffsetx{-6pt}\shadowoffsety{6pt} This is a \myfbox{\shadowtext{great}} package!
 & \shadowoffsetx{-6pt}\shadowoffsety{6pt} This is a \shadowtext{great} package! \\
 Above right
-& \shadowoffsetx{6pt}\shadowoffsety{-6pt} This is a \framebox{\shadowtext{great}} package!
+& \shadowoffsetx{6pt}\shadowoffsety{-6pt} This is a \myfbox{\shadowtext{great}} package!
 & \shadowoffsetx{6pt}\shadowoffsety{-6pt} This is a \shadowtext{great} package! \\
 Below right 
-& \shadowoffset{6pt} This is a \framebox{\shadowtext{great}} package!
+& \shadowoffset{6pt} This is a \myfbox{\shadowtext{great}} package!
 & \shadowoffset{6pt} This is a \shadowtext{great} package! \\
 \end{tabular}
 
@@ -304,6 +326,9 @@ The following code illustrates how to use shadowtext in more interesting setting
 \end{multicols*}
 \end{minipage}
 
+
+\section{Limitations}
+\shadowcolor{black!20!white}\shadowtext{Currently, the {\tt $\backslash$shadowtext} command does not support line breaks. In that respect, it behave like e.g. {\tt $\backslash$mbox} and {\tt $\backslash$fbox}.} (The previous sentence purposely runs into the margin to illustrate this limitation.)
 
 
 
