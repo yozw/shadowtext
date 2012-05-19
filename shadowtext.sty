@@ -53,15 +53,15 @@
 
 \newcommand\shadowbboxmode[1]{%
   \def\st@tmp{#1}%
-  \ifx\st@tmp\st@bbox@full%
-     \let\st@bbox@mode\st@bbox@full%
+  \ifx\st@tmp\st@bbox@full\relax%
   \else%
-     \ifx\st@tmp\st@bbox@text%
-        \let\st@bbox@mode\st@bbox@text%
+     \ifx\st@tmp\st@bbox@text\relax%
      \else%
         \errmessage{Invalid shadowtext bounding box mode: #1}%
      \fi%
-  \fi\ignorespaces}
+  \fi%
+  \def\st@bbox@mode{#1}%
+  \ignorespaces}
 
 \shadowbboxmode{full}
 
@@ -83,7 +83,7 @@
    \setlength{\st@pic@width}{\st@temp@width}%
    \setlength{\st@pic@height}{\st@temp@height}%
    \setlength{\st@pic@offset@y}{0pt}%
-   \ifx\st@bbox@mode\@full%
+   \ifx\st@bbox@mode\st@bbox@full%
       \ifdim\st@shadowoffsetx<0pt%
          \addtolength{\st@pic@width}{-\st@shadowoffsetx}%
          \setlength{\st@pic@offset@x}{\st@shadowoffsetx}%
