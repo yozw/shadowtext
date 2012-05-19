@@ -15,6 +15,9 @@
 %
 %
 % Version history
+%  v0.4: - Add bounding box mode, to make the size of the box correspond to
+%          the text instead of text + shadow
+%
 %  v0.3: - Fixed some errors in the documentation
 %        - Colors specified in \shadowcolor should now be specified using 
 %          color names, not RGB values. The command for specifying colors 
@@ -39,11 +42,28 @@
 \st@shadowoffsetx=1pt
 \st@shadowoffsety=1pt
 
-\newcommand\shadowoffset[1]{\setlength\st@shadowoffsetx{#1}\setlength\st@shadowoffsety{#1}}
-\newcommand\shadowoffsetx[1]{\setlength\st@shadowoffsetx{#1}}
-\newcommand\shadowoffsety[1]{\setlength\st@shadowoffsety{#1}}
-\newcommand\shadowcolor[1]{\def\st@shadowcolor{#1}}
-\newcommand\shadowrgb[1]{\definecolor{st@shadowcolorrgb}{rgb}{#1}\shadowcolor{st@shadowcolorrgb}}
+\newcommand\shadowoffset[1]{\setlength\st@shadowoffsetx{#1}\setlength\st@shadowoffsety{#1}\ignorespaces}
+\newcommand\shadowoffsetx[1]{\setlength\st@shadowoffsetx{#1}\ignorespaces}
+\newcommand\shadowoffsety[1]{\setlength\st@shadowoffsety{#1}\ignorespaces}
+\newcommand\shadowcolor[1]{\def\st@shadowcolor{#1}\ignorespaces}
+\newcommand\shadowrgb[1]{\definecolor{st@shadowcolorrgb}{rgb}{#1}\shadowcolor{st@shadowcolorrgb}\ignorespaces}
+
+\def\st@bbox@full{full}
+\def\st@bbox@text{text}
+
+\newcommand\shadowbboxmode[1]{%
+  \def\st@tmp{#1}%
+  \ifx\st@tmp\st@bbox@full%
+     \let\st@bbox@mode\st@bbox@full%
+  \else%
+     \ifx\st@tmp\st@bbox@text%
+        \let\st@bbox@mode\st@bbox@text%
+     \else%
+        \errmessage{Invalid shadowtext bounding box mode: #1}%
+     \fi%
+  \fi\ignorespaces}
+
+\shadowbboxmode{full}
 
 \shadowrgb{0.66,0.66,0.66}
 
@@ -51,30 +71,50 @@
 \newlength\st@temp@height 
 \newlength\st@pic@width
 \newlength\st@pic@height
+\newlength\st@pic@offset@x
+\newlength\st@pic@offset@y
+\newlength\st@pic@raisebox
 
 \newcommand\shadowtext[1]%
 {%
    \begingroup%
-   \settowidth{\st@temp@width}{#1}%
+   \settowidth{\st@temp@width}{\ignorespaces #1}%
    \settoheight{\st@temp@height}{#1}%
    \setlength{\st@pic@width}{\st@temp@width}%
    \setlength{\st@pic@height}{\st@temp@height}%
-   \addtolength{\st@pic@width}{\st@shadowoffsetx}%
-   \addtolength{\st@pic@height}{\st@shadowoffsety}%
+   \setlength{\st@pic@offset@y}{0pt}%
+   \ifx\st@bbox@mode\@full%
+      \ifdim\st@shadowoffsetx<0pt%
+         \addtolength{\st@pic@width}{-\st@shadowoffsetx}%
+         \setlength{\st@pic@offset@x}{\st@shadowoffsetx}%
+      \else%
+         \addtolength{\st@pic@width}{\st@shadowoffsetx}%
+      \fi%
+      \ifdim\st@shadowoffsety<0pt%
+         \addtolength{\st@pic@height}{0pt}%
+      \else%
+         \addtolength{\st@pic@height}{\st@shadowoffsety}%
+      \fi%
+      \setlength\st@pic@raisebox{-\st@shadowoffsety}%
+   \else%
+      \setlength\st@pic@offset@y{\st@shadowoffsety}%
+      \setlength\st@pic@raisebox{0pt}%
+   \fi
    %
    \edef\num@tw{\strip@pt\st@temp@width}%
    \edef\num@th{\strip@pt\st@temp@height}%
-   \edef\num@pw{\strip@pt\st@pic@width}%
-   \edef\num@ph{\strip@pt\st@pic@height}%
    \edef\num@offsetx{\strip@pt\st@shadowoffsetx}%
    \edef\num@offsety{\strip@pt\st@shadowoffsety}%
-   \raisebox{-\st@shadowoffsety}{
-   \begin{picture}(\num@pw,\num@ph)(0,0)
-	    \put(\num@offsetx,0){\makebox(\num@tw,\num@th)[tl]{\color{\st@shadowcolor}\def\color##1{}\ignorespaces #1}}
-		\put(0,\num@offsety){\makebox(\num@tw,\num@th)[tl]{\ignorespaces #1}}
-	\end{picture}%
+   \raisebox{\st@pic@raisebox}{%
+   \begin{picture}(\strip@pt\st@pic@width,\strip@pt\st@pic@height)%
+                  (\strip@pt\st@pic@offset@x,\strip@pt\st@pic@offset@y)
+	    \put(\num@offsetx,0){\makebox(\num@tw,\num@th)[tl]%
+	                        {\color{\st@shadowcolor}\def\color##1{}%
+	                        \ignorespaces #1}}
+		\put(0,\num@offsety){\makebox(\num@tw,\num@th)[tl]%
+		                    {\ignorespaces #1}}
+	\end{picture}}%
 	\endgroup%
-	\ignorespaces%
 }
 
 \makeatother

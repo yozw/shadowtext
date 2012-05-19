@@ -18,11 +18,15 @@
 \documentclass{article}
 
 \usepackage{xcolor}
-\usepackage{outlinetext}
+\usepackage{shadowtext}
 \usepackage{multicol}
 
+\shadowbboxmode{text}
+
 \begin{document}
-\title{\bf The shadowtext package \\ \bigskip \normalfont\small Version 0.3}
+\title{\bf The 
+\shadowcolor{black!30!white}\shadowoffset{1.5pt}\shadowtext{shadowtext}
+package \\ \bigskip \normalfont\small Version 0.4}
 \author{Y. Zwols (yz2198@columbia.edu)}
 \maketitle
 
@@ -55,11 +59,11 @@ sets the horizontal and vertical offset simultaneously. For example:
 \begin{multicols*}{2} 
 {\footnotesize
 \begin{verbatim}
-\shadowoffset{0.5pt}
+\shadowoffset{2pt}
 \shadowtext{This is a shadowtext}
 \end{verbatim}}
 
-\shadowoffset{0.5pt}
+\shadowoffset{2pt}
 \shadowtext{This is a shadowtext}
 \end{multicols*}
 \end{minipage}
@@ -83,6 +87,8 @@ the horizontal and vertical offset. For example:
 \end{multicols*}
 \end{minipage}
 
+
+
 \section{Changing the color of the shadow}
 The color of the shadow may be changed by using the {\tt shadowcolor} and {\tt shadowrgb} commands.\footnote{Internally, the 
 package uses the {\tt $\backslash$color} command from the color package to set its color} 
@@ -93,12 +99,12 @@ values. For example, the following code adds a blueish shadow using {\tt $\backs
 \begin{multicols*}{2} 
 {\footnotesize
 \begin{verbatim}
-\shadowoffset{2pt}
+\shadowoffset{1pt}
 \shadowcolor{blue!40!white}
 \shadowtext{This is a shadow text}
 \end{verbatim}}
 
-\shadowoffset{2pt}
+\shadowoffset{1pt}
 \shadowcolor{blue!40!white}
 \shadowtext{This is a shadow text}\\
 \phantom{}
@@ -111,17 +117,70 @@ The following code produces a red shadow using {\tt $\backslash$shadowrgb}:
 \begin{multicols*}{2} 
 {\footnotesize
 \begin{verbatim}
-\shadowoffset{2pt}
+\shadowoffset{1pt}
 \shadowrgb{1.0, 0.5, 0.5}
 \shadowtext{This is a shadow text}
 \end{verbatim}}
 
-\shadowoffset{2pt}
+\shadowoffset{1pt}
 \shadowrgb{1.0, 0.5, 0.5}
 \shadowtext{This is a shadow text}\\
 \phantom{}
 \end{multicols*}
 \end{minipage}
+
+\section{Changing the bounding box style}
+There are two natural choices for the bounding box around the shadow text. The
+first choice is the bounding box around the main text; the second
+is the bounding box around the main text plus its shadow. These two choices are 
+referred to as the \textit{text} mode and the \textit{full} mode, respectively.
+They can be activated by the commands {\tt $\backslash$shadowbboxmode\{text\}}
+and {\tt $\backslash$shadowbboxmode\{full\}} commands, respectively.
+For backwards compatibility reasons, the default bounding box mode is ``full''.
+
+\subsection{``Full'' bounding box mode}
+This mode is activated by {\tt $\backslash$shadowbboxmode\{full\}}. The following output demonstrates (and tests) the effect:
+
+\shadowbboxmode{full}
+\renewcommand\arraystretch{2}
+\begin{tabular}{@{}l@{\qquad}l@{\qquad}l}
+\textbf{Shadow position} & \textbf{Inside framebox} & \textbf{Without framebox} \\
+Above left 
+& \shadowoffset{-6pt} This is a \framebox{\shadowtext{great}} package!
+& \shadowoffset{-6pt} This is a \shadowtext{great} package! \\
+Below left 
+& \shadowoffsetx{-6pt}\shadowoffsety{6pt} This is a \framebox{\shadowtext{great}} package!
+& \shadowoffsetx{-6pt}\shadowoffsety{6pt} This is a \shadowtext{great} package! \\
+Above right
+& \shadowoffsetx{6pt}\shadowoffsety{-6pt} This is a \framebox{\shadowtext{great}} package!
+& \shadowoffsetx{6pt}\shadowoffsety{-6pt} This is a \shadowtext{great} package! \\
+Below right 
+& \shadowoffset{6pt} This is a \framebox{\shadowtext{great}} package!
+& \shadowoffset{6pt} This is a \shadowtext{great} package! \\
+\end{tabular}
+
+
+\subsection{``Text'' bounding box mode}
+This mode is activated by {\tt $\backslash$shadowbboxmode\{text\}}. The following output demonstrates (and tests) the effect:
+
+\shadowbboxmode{text}
+\renewcommand\arraystretch{2}
+\begin{tabular}{@{}l@{\qquad}l@{\qquad}l}
+\textbf{Shadow position} & \textbf{Inside framebox} & \textbf{Without framebox} \\
+Above left 
+& \shadowoffset{-6pt} This is a \framebox{\shadowtext{great}} package!
+& \shadowoffset{-6pt} This is a \shadowtext{great} package! \\
+Below left 
+& \shadowoffsetx{-6pt}\shadowoffsety{6pt} This is a \framebox{\shadowtext{great}} package!
+& \shadowoffsetx{-6pt}\shadowoffsety{6pt} This is a \shadowtext{great} package! \\
+Above right
+& \shadowoffsetx{6pt}\shadowoffsety{-6pt} This is a \framebox{\shadowtext{great}} package!
+& \shadowoffsetx{6pt}\shadowoffsety{-6pt} This is a \shadowtext{great} package! \\
+Below right 
+& \shadowoffset{6pt} This is a \framebox{\shadowtext{great}} package!
+& \shadowoffset{6pt} This is a \shadowtext{great} package! \\
+\end{tabular}
+
 
 \section{More examples}
 The following code illustrates how to use shadowtext in more interesting settings:
@@ -241,8 +300,11 @@ The following code illustrates how to use shadowtext in more interesting setting
 \phantom{}\\
 \phantom{}\\
 \phantom{}\\
+\phantom{}\\
 \end{multicols*}
 \end{minipage}
+
+
 
 
 \end{document}

@@ -36,6 +36,9 @@ Documentation is available in the form of the file shadowtext.tex.
 4 - Version History
     ---------------
 
+v0.4: - Add bounding box mode, to make the size of the box correspond to
+        the text instead of text + shadow
+
 v0.3: - Fixed some errors in the documentation
       - Colors specified in \shadowcolor should now be specified using 
         color names, not RGB values. The command for specifying colors 
